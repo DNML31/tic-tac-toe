@@ -1,43 +1,84 @@
+class Board
+  attr_writer :board
+
+  @@board = "\t1 | 2 | 3\n\t--+---+--\n\t4 | 5 | 6\n\t--+---+--\n\t7 | 8 | 9\n"
+  def initialize()
+    puts @@board
+  end
+
+  def mark
+    # replace character in string with gets.chomp from P1 or P2
+  end
+end
+
+class P1 < Board
+  attr_reader :board
+
+  def initialize ; end
+  def new_board(num)
+    puts @@board.sub(num, 'X') # replace the string character with x = gets.chomp
+  end
+end
+
+class P2 < Board
+  attr_reader :board
+
+  def initialize ; end
+  def new_board(num)
+    puts @@board.sub(num, 'O') # replace the string character with x = gets.chomp
+  end
+end
+
 def intro
   puts "Let's play Tic-Tac-Toe! \nP1's marker is X and P2's marker is O."
-  puts "Ready? Y/N"
+  puts 'Ready? Y/N'
 end
 
-intro()
+def game_won
+#  if player's array = any winning array combo
+#    puts player wins
+end
 
-answer = gets.chomp
-board = nil
+def play_game
 
-def play_game()
+  board = Board.new
   puts "\nP1's turn (X). Which square do you want to mark?"
-  gets.chomp
+  x = gets.chomp
+  hey = P1.new
+  hey.new_board(x) # replaces board number with marker AND re-put board
+  
+  puts "\nP2's turn (O). Which square do you want to mark?"
+  y = gets.chomp
+  what = P2.new
+  what.new_board(y)
+
 end
 
-if answer == "y"
-  board = "\t1 | 2 | 3\n\t--+---+--\n\t4 | 5 | 6\n\t--+---+--\n\t7 | 8 | 9\n"
-  puts board
-  play_game()
+intro
+answer = gets.chomp
 
+if answer == 'y'
 
-elsif answer == "n"
-  puts "Next time then!"
+  play_game
+
+elsif answer == 'n'
+
+  puts 'Next time then!'
+
 else
-  intro()
+
+  intro
+
 end
 
+# array to check for wins
+# ex: if a player has markers on [1,2,3] or [1,5,9] in no particular order
+# [1,2,3], [4,5,6], [7,8,9] horizontals
+# [1,4,7], [2,5,8], [3,6,9] verticals
+# [1,5,9], [3,5,7] diagonals
 
+# "When you find that you want the same method to be run on a bunch of different
+# objects without having to make a bunch of different if/else or case statements, 
+# you should start thinking about using a class."
 
-class Marker
-  def add_mark
-  end
-end
-
-class P1 < Marker
-  def initialize
-  end
-end
-
-class P2 < Marker
-  def initialize
-  end
-end
+# store data in hashes, like P1's squares
