@@ -15,8 +15,10 @@ class P1 < Board
   attr_reader :board
 
   def initialize ; end
-  def new_board(num)
-    puts @@board.sub(num, 'X') # replace the string character with x = gets.chomp
+  def mark_board(num)
+    @@board = @@board.sub(num, 'X')
+    puts @@board
+
   end
 end
 
@@ -24,14 +26,26 @@ class P2 < Board
   attr_reader :board
 
   def initialize ; end
-  def new_board(num)
-    puts @@board.sub(num, 'O') # replace the string character with x = gets.chomp
+  def mark_board(num)
+    @@board = @@board.sub(num, 'O')
+    puts @@board
   end
 end
 
 def intro
+
   puts "Let's play Tic-Tac-Toe! \nP1's marker is X and P2's marker is O."
   puts 'Ready? Y/N'
+
+  answer = gets.chomp
+
+  if answer == 'y'
+    play_game
+  elsif answer == 'n'
+    puts 'Next time then!'
+  else
+    intro
+  end
 end
 
 def game_won
@@ -44,32 +58,17 @@ def play_game
   board = Board.new
   puts "\nP1's turn (X). Which square do you want to mark?"
   x = gets.chomp
-  hey = P1.new
-  hey.new_board(x) # replaces board number with marker AND re-put board
+  p1_mark = P1.new
+  p1_mark.mark_board(x) # replaces board number with marker AND re-put board
   
   puts "\nP2's turn (O). Which square do you want to mark?"
   y = gets.chomp
-  what = P2.new
-  what.new_board(y)
+  p2_mark = P2.new
+  p2_mark.mark_board(y)
 
 end
 
 intro
-answer = gets.chomp
-
-if answer == 'y'
-
-  play_game
-
-elsif answer == 'n'
-
-  puts 'Next time then!'
-
-else
-
-  intro
-
-end
 
 # array to check for wins
 # ex: if a player has markers on [1,2,3] or [1,5,9] in no particular order
