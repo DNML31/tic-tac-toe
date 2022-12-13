@@ -1,13 +1,30 @@
 class Board
   attr_writer :board
+  attr_reader :choices
 
   @@board = "\t1 | 2 | 3\n\t--+---+--\n\t4 | 5 | 6\n\t--+---+--\n\t7 | 8 | 9\n"
+
+  @@choices = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
   def initialize()
     puts @@board
   end
 
-  def mark
-    # replace character in string with gets.chomp from P1 or P2
+  def mark_board(choice, marker)
+
+    if @@choices.include?(choice.to_i)
+
+      @@choices.delete(choice.to_i)
+      @@board = @@board.sub(choice, marker)
+      puts @@board
+
+    else
+
+      puts 'Invalid choice. Choose another.'
+      new_choice = gets.chomp
+      mark_board(new_choice, marker)
+
+    end
   end
 end
 
@@ -15,30 +32,23 @@ class P1 < Board
   attr_reader :board
 
   def initialize ; end
-  def mark_board(num)
-    @@board = @@board.sub(num, 'X')
-    puts @@board
 
-  end
 end
 
 class P2 < Board
   attr_reader :board
 
   def initialize ; end
-  def mark_board(num)
-    @@board = @@board.sub(num, 'O')
-    puts @@board
-  end
+
 end
 
 def intro
-
+  
   puts "Let's play Tic-Tac-Toe! \nP1's marker is X and P2's marker is O."
   puts 'Ready? Y/N'
-
+  
   answer = gets.chomp
-
+  
   if answer == 'y'
     play_game
   elsif answer == 'n'
@@ -48,23 +58,72 @@ def intro
   end
 end
 
-def game_won
-#  if player's array = any winning array combo
-#    puts player wins
-end
-
 def play_game
 
+  game_won = false
+
+  three_in_a_row = [
+    [1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], 
+    [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]
+  ]
+
+  p1_squares = []
+  p2_squares = []
+
   board = Board.new
-  puts "\nP1's turn (X). Which square do you want to mark?"
-  x = gets.chomp
-  p1_mark = P1.new
-  p1_mark.mark_board(x) # replaces board number with marker AND re-put board
-  
-  puts "\nP2's turn (O). Which square do you want to mark?"
-  y = gets.chomp
-  p2_mark = P2.new
-  p2_mark.mark_board(y)
+
+  while game_won == false do 
+
+    puts "\nP1's turn (X). Which square do you want to mark?"
+
+    x = gets.chomp
+    p1_squares.push(x.to_i)
+    p1_mark = P1.new
+    p1_mark.mark_board(x, 'X')
+
+    if three_in_a_row.include?(p1_squares.sort)
+
+      game_won = true
+      puts 'P1 wins!'
+      puts 'Play again? Y/N'
+      answer = gets.chomp
+      if answer == 'y'
+        play_game
+      else
+        break
+      end
+
+    else
+
+      game_won = false
+      puts "\nP2's turn (O). Which square do you want to mark?"
+
+    end
+
+    y = gets.chomp
+    p2_squares.push(y.to_i)
+    p2_mark = P2.new
+    p2_mark.mark_board(y, 'O')
+
+    if three_in_a_row.include?(p2_squares.sort)
+
+      game_won = true
+      puts 'P2 wins!'
+      puts 'Play again? Y/N'
+      answer = gets.chomp
+      if answer == 'y'
+        play_game
+      else
+        break
+      end
+
+    else
+
+      game_won = false
+      # retry
+
+    end
+  end
 
 end
 
