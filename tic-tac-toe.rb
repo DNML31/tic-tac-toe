@@ -13,19 +13,20 @@ class Board
   def mark_board(choice, marker)
 
     if @@choices.include?(choice.to_i)
-
       @@choices.delete(choice.to_i)
       @@board = @@board.sub(choice, marker)
       puts @@board
-
+    elsif @@choices.empty?
+      puts 'No more playable squares.'
+      exit
     else
-
+      # something happens here that prevents winning after invalid mark
       puts 'Invalid choice. Choose another.'
       new_choice = gets.chomp
       mark_board(new_choice, marker)
-
     end
   end
+
 end
 
 class P1 < Board
@@ -50,6 +51,7 @@ def intro
   answer = gets.chomp
   
   if answer == 'y'
+    board = Board.new
     play_game
   elsif answer == 'n'
     puts 'Next time then!'
@@ -62,7 +64,7 @@ def play_game
 
   game_won = false
 
-  three_in_a_row = [
+  threes = [
     [1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], 
     [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]
   ]
@@ -70,9 +72,7 @@ def play_game
   p1_squares = []
   p2_squares = []
 
-  board = Board.new
-
-  while game_won == false do 
+  while game_won == false do
 
     puts "\nP1's turn (X). Which square do you want to mark?"
 
@@ -81,12 +81,12 @@ def play_game
     p1_mark = P1.new
     p1_mark.mark_board(x, 'X')
 
-    if three_in_a_row.include?(p1_squares.sort)
-
+    if threes.include?(p1_squares.sort)
       game_won = true
-      puts 'P1 wins!'
+      puts 'P1 wins.'
       puts 'Play again? Y/N'
       answer = gets.chomp
+
       if answer == 'y'
         play_game
       else
@@ -94,10 +94,8 @@ def play_game
       end
 
     else
-
       game_won = false
       puts "\nP2's turn (O). Which square do you want to mark?"
-
     end
 
     y = gets.chomp
@@ -105,22 +103,22 @@ def play_game
     p2_mark = P2.new
     p2_mark.mark_board(y, 'O')
 
-    if three_in_a_row.include?(p2_squares.sort)
-
+    if threes.include?(p2_squares.sort)
       game_won = true
-      puts 'P2 wins!'
+      puts 'P2 wins.'
       puts 'Play again? Y/N'
       answer = gets.chomp
+
       if answer == 'y'
+        board = nil
+        board = Board.new
         play_game
       else
         break
       end
 
     else
-
       game_won = false
-      # retry
 
     end
   end
